@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import cloudinary_storage
+import os 
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -135,7 +138,7 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "NeoTour-Project", 
-    "VERSION": "0.0.1", 
+    "VERSION": "1.0.0", 
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_SETTINGS": {
         "filter": True, 
@@ -143,10 +146,15 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_SPLIT_REQUEST": True
 }
 
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.getenv('CLOUD_NAME'),
+#     'API_KEY': os.getenv('API_KEY'),
+#     'API_SECRET': os.getenv('API_SECRET'),
+# }
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': '',
-    'API_KEY': '',
-    'API_SECRET': '',
+    'CLOUD_NAME': 'dkete6mwi',
+    'API_KEY': '741993156295599',
+    'API_SECRET': 'FTOVb9JFHICckCjKsMWnKvnCnD8',
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
