@@ -1,3 +1,31 @@
 from django.shortcuts import render
+from rest_framework.views import Response, status
+from rest_framework.views import APIView
+from .models import Tour, Review
+from .serializers import TourListSerializer, TourDetailSerializer, TourReviewListSerializer
 
 # Create your views here.
+
+class TourListAPIView(APIView):
+
+    def get(self, request):
+        tours = Tour.objects.all()
+        serializer = TourListSerializer(tours, many = True)
+        return Response(serializer.data)
+
+class TourDetailAPIView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            tour = Tour.objects.all().get(id = kwargs['pk'])
+        except Exception as e:
+            return Response({"data": "Page not found"}, status=status.HTTP_404_NOT_FOUND)
+        reviews = tour.reviews.all()
+        tour_serializer = TourDetailSerializer(tour)
+        reviews_serializer = TourReviewListSerializer(reviews, many = True)
+        content = {
+            "Tour info" : tour_serializer.data,
+            "Reviews" : reviews_serializer.data
+        }
+        return Response(content, status=status.HTTP_200_OK)
+    
