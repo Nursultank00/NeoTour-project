@@ -2,9 +2,9 @@ from django.shortcuts import render
 from rest_framework.views import Response, status
 from rest_framework.views import APIView
 from .models import Tour, Review
-from .serializers import TourListSerializer, TourDetailSerializer, TourReviewListSerializer
+from .serializers import TourListSerializer, TourDetailSerializer
+from .serializers import TourReviewListSerializer, ReservationSerializer
 
-# Create your views here.
 
 class TourListAPIView(APIView):
 
@@ -29,3 +29,10 @@ class TourDetailAPIView(APIView):
         }
         return Response(content, status=status.HTTP_200_OK)
     
+    def post(self, request, *args, **kwargs):
+        request.data['tour_reserved'] = kwargs['pk']
+        serializer = ReservationSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
