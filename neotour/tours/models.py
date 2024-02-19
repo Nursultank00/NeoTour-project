@@ -1,6 +1,12 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+CHOICES = (
+        ('Summer', 'Summer'),
+        ('Winter', 'Winter'),
+        ('Spring', 'Spring'),
+        ('Autumn', 'Autumn'),
+)
 class Category(models.Model):
     category_name = models.CharField(max_length = 255)
 
@@ -17,6 +23,7 @@ class Tour(models.Model):
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     location = models.CharField(max_length = 255)
     description = models.TextField()
+    season = models.CharField(max_length=10, choices = CHOICES, default = 'Summer')
     image = models.ImageField(upload_to = 'tour_profile_photos')
 
     class Meta:
@@ -40,7 +47,6 @@ class Review(models.Model):
 
 class Reservation(models.Model):
     phone_number = models.CharField(max_length = 20)
-    reserve_date = models.DateField()
     comments_to_reserve = models.TextField()
     number_of_people = models.IntegerField(default=1, validators=[
                                                                 MaxValueValidator(100),

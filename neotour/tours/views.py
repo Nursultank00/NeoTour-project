@@ -1,17 +1,39 @@
 from django.shortcuts import render
 from rest_framework.views import Response, status
 from rest_framework.views import APIView
-from .models import Tour, Review
-from .serializers import TourListSerializer, TourDetailSerializer
+from .models import Tour, Category
+from .serializers import CategoryListSerializer, TourListSerializer, TourDetailSerializer
 from .serializers import TourReviewListSerializer, ReservationSerializer
 
+from datetime import datetime
+
+def parse_month(cur_month):
+    if cur_month in (12,1,2):
+        return 'Winter'
+    elif cur_month in (3,4,5):
+        return 'Spring'
+    elif cur_month in (6,7,8):
+        return 'Summer'
+    else:
+        return 'Autumn'
 
 class TourListAPIView(APIView):
 
     def get(self, request):
-        tours = Tour.objects.all()
-        serializer = TourListSerializer(tours, many = True)
-        return Response(serializer.data)
+        categories = Category.objects.all()
+        category_tours = Tour.objects.all()
+        current_month = datetime.now().month
+        current_season = parse_month(current_month)
+        recommended_tours = Tour.objects.all().filter(season = current_season)
+        categories_serializer = CategoryListSerializer(categories, many = True)
+        category_tours_serializer = TourListSerializer(category_tours, many = True)
+        recommended_tours_serializer = TourListSerializer(recommended_tours, many = True)
+        content = {
+            "Categories": categories_serializer.data, 
+            "Tours": category_tours_serializer.data,
+            "Recommended tours": recommended_tours_serializer.data,
+        }
+        return Response(content)
 
 class TourDetailAPIView(APIView):
 

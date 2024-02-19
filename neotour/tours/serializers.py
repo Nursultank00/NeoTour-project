@@ -1,15 +1,19 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Tour, Reservation, Review
+from .models import Category, Tour, Reservation, Review
 
+class CategoryListSerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['category_name']
 class TourListSerializer(ModelSerializer):
     class Meta:
         model = Tour
-        fields = '__all__'
+        fields = ['tour_name', 'image']
 
 class TourDetailSerializer(ModelSerializer):
     class Meta:
         model = Tour
-        fields = '__all__'
+        fields = ['tour_name', 'location', 'description', 'image']
 
 class TourReviewListSerializer(ModelSerializer):
     class Meta:
