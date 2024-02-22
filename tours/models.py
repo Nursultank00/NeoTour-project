@@ -20,7 +20,7 @@ class Category(models.Model):
 # Create your models here.
 class Tour(models.Model):
     tour_name = models.CharField(max_length = 255)
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category = models.ManyToManyField(Category, related_name = 'tourslist')
     location = models.CharField(max_length = 255)
     description = models.TextField()
     season = models.CharField(max_length=10, choices = CHOICES, default = 'Summer')

@@ -4,12 +4,16 @@ from .models import Category, Tour, Reservation, Review
 class CategoryListSerializer(ModelSerializer):
     class Meta:
         model = Category
-        fields = ['category_name']
+        fields = '__all__'
 class TourListSerializer(ModelSerializer):
     class Meta:
         model = Tour
-        fields = ['tour_name', 'image']
+        fields = ['tour_name', 'image', 'category']
 
+class RecommendedTourListSerializer(ModelSerializer):
+    class Meta:
+        model = Tour
+        fields = ['tour_name', 'image']
 class TourDetailSerializer(ModelSerializer):
     class Meta:
         model = Tour
