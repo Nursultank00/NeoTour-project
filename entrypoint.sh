@@ -10,4 +10,4 @@ python manage.py migrate
 
 # Start server
 echo "Starting server"
-gunicorn config.wsgi:application -w 4 -b 0.0.0.0:8000
+gunicorn neotour.wsgi:application -w 4 -b 0.0.0.0:8000
