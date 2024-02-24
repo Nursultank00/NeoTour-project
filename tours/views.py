@@ -25,7 +25,7 @@ class TourListAPIView(APIView):
             summary = "Вывод списков туров",
             description = "Этот эндпоинт позволяет получить информацию о турах, разбитых по категориям и список рекомендованных туров",
     )
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         categories = Category.objects.all()
         category_tours = Tour.objects.all()
         current_month = datetime.now().month
@@ -48,7 +48,6 @@ class TourDetailAPIView(APIView):
             description = "Этот эндпоинт позволяет получить детальную информацию о туре: название, локацию, описание и ревью, оставленные клиентами,тура",
     )
     def get(self, request, *args, **kwargs):
-        """Эндпоинт для детальной информации о туре"""
         try:
             tour = Tour.objects.all().get(id = kwargs['pk'])
         except Exception as e:
@@ -67,9 +66,32 @@ class TourDetailAPIView(APIView):
             description = "Этот эндпоинт позволяет забронировать тур с помощью номера телефона и указанием количества людей",
     )
     def post(self, request, *args, **kwargs):
-        """Эндпоинт для бронирования туров"""
         request.data['tour_reserved'] = kwargs['pk']
         serializer = ReservationSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ReviewListAPIView(APIView):
+
+    @extend_schema(
+            summary = "Получение всех ревью по туру",
+            description = "Этот эндпоинт позволяет получить все ревью по туру",
+    )
+    def get(self, request, *args, **kwargs):
+        tour = Tour.objects.all().get(id = kwargs['pk'])
+        reviews = tour.reviews.all()
+        reviews_serializer = TourReviewListSerializer(reviews, many = True)
+        return Response(reviews_serializer.data, status=status.HTTP_200_OK)
+    
+    @extend_schema(
+            summary = "Отправка ревью по туру",
+            description = "Этот эндпоинт позволяет оставить ревью по туру",
+    )
+    def post(self, request, *args, **kwargs):
+        request.data['tour_related'] = kwargs['pk']
+        serializer = TourReviewListSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
