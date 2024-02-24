@@ -27,17 +27,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+
 if os.environ.get('DJANGO_DEBUG'):
-    print("Debug is enabled.")
     DEBUG = True
-    # When not specified, ALLOW_HOSTS defaults to:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 else:
     DEBUG = False
-    ALLOWED_HOSTS = ['164.92.135.221',
-                    '64.23.202.53',
-                    '127.0.0.1',
-                    'localhost']
+    
+ALLOWED_HOSTS = ['164.92.135.221',
+                '64.23.202.53',
+                '127.0.0.1',
+                'localhost']
 
 # Application definition
 
