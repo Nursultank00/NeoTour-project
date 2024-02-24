@@ -16,7 +16,6 @@ services:
     volumes:
       - .:/code
       - ./static:/app/static
-      - .db_data/db.sqlite3:/db.sqlite3
     ports:
       - "8000:8000"
     env_file:
